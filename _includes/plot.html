@@ -1,0 +1,51 @@
+<div id="{{ include.divid }}" style="min-width: 310px; margin: 0 auto"></div>
+<script>
+(function () {
+	var request = new XMLHttpRequest();
+	
+	request.onreadystatechange = function() {
+	  if (request.readyState == 4 && request.status == 200) {
+		var data = $.csv.toArrays(request.responseText);
+		header = data[0];
+		var transformed = TransposeCsvData(data);
+		
+		series = [];
+		for(var i in header) {
+			if(i != 0){
+				series.push({name: header[i], data: transformed[i]});
+			}
+		}
+		
+		$('#{{ include.divid }}').highcharts({
+			title: {
+				text: '{{ include.title }}'
+			},
+			xAxis: {
+				categories: transformed[0],
+				title:{
+					text: '{{ include.xtitle }}'
+				}
+			},
+			yAxis: {
+				{% if include.ytype %}type:'{{include.ytype}}',{%endif%}
+				title: {
+					text: '{{ include.ytitle }}'
+				}
+			},
+			tooltip: {
+				valueSuffix: '{{ include.suffix }}'
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'middle'
+			},
+			series: series
+		});
+	  }
+	};
+	
+	request.open("GET", "{{ include.csvpath }}", true);
+	request.send();
+})();
+</script>
