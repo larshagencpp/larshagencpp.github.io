@@ -9,7 +9,7 @@ function TransposeCsvData(data) {
 		if(i > 0) {
 			for(var j in data[i]) {
 				if(new_data[j]) {
-					if(j == 0){
+					if(isNaN(data[i][j])) {
 						new_data[j].push(data[i][j]);
 					}
 					else {
