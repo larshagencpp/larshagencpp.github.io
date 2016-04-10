@@ -37,7 +37,7 @@
 			yLogSpread += evaluateSpread(transformed[i].map(function(x) { return Math.log(x); }));
 		}
 		
-		var xAxis = { title: { text: '{{ include.xtitle }}' } };
+		var xAxis = { title: { text: header[0] } };
 		series = [];
 		if(transformed[0].every(function (x) { return !isNaN(x) })) {
 			//X axis is numerical
