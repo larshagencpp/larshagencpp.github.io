@@ -1,3 +1,20 @@
+html {
+  border-top: 6px solid #444;
+  font: 1.125em/1.5 "proxima-nova","helvetica neue",helvetica,arial,sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  color: #444;
+}
+
+div.postdate {
+  font-size: 12px;
+}
+
+h3.posttitle {
+	margin: 0;
+	margin-top: 20px;
+}
+  
 body {
     margin: 60px auto;
     width: 70%;
@@ -24,7 +41,7 @@ h1 {
     font-family:'Helvetica', 'Arial', 'Sans-Serif';
 }
 p {
-    font-size: 1.5em;
+    font-size: 1em;
     line-height: 1.4em;
     color: #333;
 }
