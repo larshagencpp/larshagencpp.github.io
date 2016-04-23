@@ -3,10 +3,9 @@ layout: post
 title: "Fast incremental sort"
 ---
 
-I recently came across the need for an incremental sorting algorithm, and started to wonder how to do it optimally. We'll see how branch misprediction and other constant factors can make the naive asymptotically optimal version far slower than a practical implementation.
+I recently came across the need for an incremental sorting algorithm, and started to wonder how to do it optimally. 
 
 The incremental sorting problem is described [here](https://en.wikipedia.org/wiki/Partial_sorting), and is an "online" version of partial sort. That is, if you have already sorted $$k$$ elements, you should be able to quickly sort $$k+1$$ elements, and so on.
-
 
 **Use Cases**
 
@@ -15,6 +14,8 @@ Incremental sorts can be useful for a number of cases:
 * You want sorted items, but you don't know how many elements you'll need.
 	* This could often happen when you are filtering the resulting sequence, and you don't know how many items will be filtered out.
  * You are streaming the sequence, so even though you want the whole sequence, you want the first elements as quickly as possible.
+
+We'll see how branch misprediction and other constant factors can make the naive asymptotically optimal version far slower than a practical implementation.
  
 **Measuring Performance**
 
