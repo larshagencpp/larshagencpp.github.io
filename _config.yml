@@ -1,4 +1,6 @@
-name: Lars Hagen
+name: C++ While True
 markdown: kramdown
 permalink: /blog/:year/:month/:day/:title
 highlighter: rouge
+description: A blog about writing fast, modern C++.
+url: http://larshagencpp.github.io
