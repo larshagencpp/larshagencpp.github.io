@@ -1,7 +1,10 @@
 ---
 layout: post
 title: "Fast incremental sort"
+excerpt: "I recently came across the need for an incremental sorting algorithm, and started to wonder how to do it optimally."
 ---
+
+<i>**Update:** Continued in this [post](/blog/2016/04/25/fast-incremental-sort-2).</i>
 
 I recently came across the need for an incremental sorting algorithm, and started to wonder how to do it optimally. 
 
@@ -16,7 +19,7 @@ Incremental sorts can be useful for a number of cases:
  * You are streaming the sequence, so even though you want the whole sequence, you want the first elements as quickly as possible.
 
 We'll see how branch misprediction and other constant factors can make the naive asymptotically optimal version far slower than a practical implementation.
- 
+
 **Measuring Performance**
 
 Measuring the performance of an incremental sort is a bit more involved than full sort, because for a given $$N$$ we care about how fast we reach each $$k^{th}$$ element. To keep it simple, I'll keep $$N$$ fixed at 10 million, and measure the time taken to reach each $$k^{th}$$ element. The input range is a vector of random integers.
@@ -241,3 +244,5 @@ value_type get_pivot() {
  By combining the incremental quick sort algorithm with smart pivot selection, we can get an incremental sorting algorithm that is as fast as partial sort for small $$k$$, and as fast as full sort when $$k$$ approaches $$N$$.
  
  This is my first real blog post, so comments and suggestions are welcome!
+ 
+ <i>**Update:** Continued in this [post](/blog/2016/04/25/fast-incremental-sort-2).</i>
