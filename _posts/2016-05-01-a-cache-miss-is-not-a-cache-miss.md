@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "A cache miss is not a cache miss"
-excerpt: "When writing performant code, we are careful to avoid cache misses when possible. When discussing cache misses, however, we are usually content with counting the number of cache misses. In this post I will explain why this is not sufficient, as data dependency also make a huge difference."
+excerpt: "When writing high performance code, we are careful to avoid cache misses when possible. When discussing cache misses, however, we are usually content with counting the number of cache misses. In this post I will explain why this is not sufficient, as data dependency also make a huge difference."
 ---
 
-When writing performant code, we are careful to avoid cache misses when possible. When discussing cache misses, however, we are usually content with counting the number of cache misses. In this post I will explain why this is not sufficient, as data dependency also make a huge difference.
+When writing high performance code, we are careful to avoid cache misses when possible. When discussing cache misses, however, we are usually content with counting the number of cache misses. In this post I will explain why this is not sufficient, as data dependency also make a huge difference.
 
 Consider for example a <code>vector&lt;unique_ptr&lt;int&gt;&gt;</code>. If the vector is large, iterating over the integers will typically incur a cache miss per element, because they are stored at arbitrary locations in memory. If we have a <code>list&lt;int&gt;</code>, iteration will also incur a cache miss for each element, because the nodes of the list are stored at arbitrary locations.
 
