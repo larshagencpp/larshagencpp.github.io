@@ -93,4 +93,4 @@ Why do we see this large difference? The answer is simply data dependency. When 
 
 **Conclusion**
 
-I hope I have made the argument that all cache misses are not equal, and that considering data dependency between the reads can be just as important as counting the misses.
+I hope I have made the argument that all cache misses are not equal, and that considering data dependency between the reads can be just as important as counting cache misses.
