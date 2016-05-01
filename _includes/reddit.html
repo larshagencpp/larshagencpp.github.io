@@ -40,7 +40,6 @@ jQuery(document).ready(function() {
 			if (window.reddit_url)  {write_string += encodeURIComponent(reddit_url);} else { 
 			    write_string += encodeURIComponent(window.location.href);}
 			if (window.reddit_title) {write_string += '&title=' + encodeURIComponent(window.reddit_title);}
-			console.log('Setting subreddit to ' + window.reddit_target);
 			if (window.reddit_target) {write_string += '&sr=' + encodeURIComponent(window.reddit_target);}
 			if (window.reddit_css) {write_string += '&css=' + encodeURIComponent(window.reddit_css);}
 			if (window.reddit_bgcolor) {write_string += '&bgcolor=' + encodeURIComponent(window.reddit_bgcolor); }
@@ -58,8 +57,6 @@ jQuery(document).ready(function() {
 	    // any source) he will see how many upvotes it has in r/tomatoes and will be able to upload there. Because 
 	    // we love tomatoes
 	    try {
-		console.log(jQuery("[rel=canonical]").attr("href"));
-		
 		searchdata="http://www.reddit.com/search.json?q=url:"+jQuery("[rel=canonical]").attr("href");
 		jQuery.ajax({
 		    type: "GET",
@@ -87,7 +84,6 @@ jQuery(document).ready(function() {
 				// wonderful that reddit's code is not minified or obfuscated for this case...
 				if(typeof target != "undefined" && target != ""){
 					reddit_target = target;
-					console.log('target: ' + target);
 				}
 				
 				if ('https:' == document.location.protocol) {
@@ -98,7 +94,6 @@ jQuery(document).ready(function() {
 					write_string += encodeURIComponent(window.location.href);}
 				if (window.reddit_title) {write_string += '&title=' + encodeURIComponent(window.reddit_title);}
 				
-				console.log('Setting subreddit to ' + window.reddit_target);
 				if (window.reddit_target) {write_string += '&sr=' + encodeURIComponent(window.reddit_target);}
 				if (window.reddit_css) {write_string += '&css=' + encodeURIComponent(window.reddit_css);}
 				if (window.reddit_bgcolor) {write_string += '&bgcolor=' + encodeURIComponent(window.reddit_bgcolor); }
