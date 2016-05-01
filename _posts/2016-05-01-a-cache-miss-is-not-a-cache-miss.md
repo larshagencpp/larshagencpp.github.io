@@ -18,13 +18,9 @@ To avoid the peculiarities of the memory system, or making my own allocator, I h
 vector<pair<int, int>> create_random_data(int N) {
   mt19937 mt;
 
-  vector<int> sequence;
-  {
-    int i = 0;
-    generate_n(back_inserter(sequence), N, [&] { return i++; });
-    shuffle(sequence.begin(), sequence.end(), mt);
-  }
-  
+  vector<int> sequence(N);
+  std::iota(sequence.begin(), sequence.end(), 0);
+  shuffle(sequence.begin(), sequence.end(), mt);
 
   vector<pair<int, int>> ret;
   generate_n(back_inserter(ret), N, [&]{ return pair<int, int>{ 0, mt() }; });
