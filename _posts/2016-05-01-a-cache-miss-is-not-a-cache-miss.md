@@ -51,7 +51,7 @@ void iterate_linked_list(const vector<pair<int, int>>& data) {
 }
 {% endhighlight %}
 
-Iterating over a vector of pointers is approximated by simple reading the payload of the next element in the chain, but otherwise going through the vector in normal order:
+Iterating over a vector of pointers is approximated by simply reading the payload of the next element in the chain, but otherwise going through the vector in normal order:
 
 {% highlight c++ %}
 void iterate_pointers(const vector<pair<int, int>>& data) {
