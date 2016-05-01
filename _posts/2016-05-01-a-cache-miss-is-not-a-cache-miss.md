@@ -23,7 +23,10 @@ vector<pair<int, int>> create_random_data(int N) {
   shuffle(sequence.begin(), sequence.end(), mt);
 
   vector<pair<int, int>> ret;
-  generate_n(back_inserter(ret), N, [&]{ return pair<int, int>{ 0, mt() }; });
+  generate_n(
+	back_inserter(ret), 
+	N, 
+	[&]{ return pair<int, int>{ 0, mt() }; });
 
   for (int i = 0; i < N; ++i) {
     auto next_i = (i + 1) % N;
