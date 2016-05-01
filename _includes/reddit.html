@@ -1,0 +1,121 @@
+<div id="reddit" />
+<script>
+jQuery(document).ready(function() {
+    // This is the poor man's way of doing an straightforward, async load. 
+    // I needed the reddit button in our pages, and our technical guy asked me
+    // to get an async version, since we have a very fast website and we'd rather
+    // keep it. Since reddit does not offer an async version this is the best I 
+    // could come up after giving it 5 minutes thought. I could probably get 
+    // something better which is actually async. Waiting for document.ready means that 
+    // if something else is "very" blocking, the reddit button may never appear. But
+    // I'd rather settle for good enough than spend an stupidly long amount of time
+    // looking for the perfect solution to a minor problem.
+  
+    // Setting up the document.title makes submitting slightly easier for the user. 
+    // If no title is provided, the title box is empty when landing at reddit
+    reddit_title=document.title;
+    // Setting the url directly seems to avoid a url encoding issue that makes the upvote/downvote 
+    // buttons don't work at all. At least, without it doesn't work, with it, it does.
+    reddit_url=jQuery("[rel=canonical]").attr("href");
+    // This is the base subreddit where we want to send our content
+    reddit_target='cpp';
+    maxscore=0;
+    pagereferrer=document.referrer;
+    referrerdomain=pagereferrer.match(/:\/\/(www\.|)([^\/]*)/);
+    if(referrerdomain!=null && referrerdomain.length>=3){
+  referrerdomain=referrerdomain[2];
+    }
+    // If the visitor is coming from reddit, we want our users to be able to directly upvote
+    // our content in the subreddit they found it. Of course, this is a personal opinion,
+    // but even if r/tomatoes has only 3 users, if our content is promoted there, should be 
+    // voted there even if submitting to our base reddit has more readers
+    try {
+	if(referrerdomain=="reddit.com"){
+	    reddit_target=pagereferrer.match(/reddit.com(\/|\/\/)r(\/|\/\/)([^/]*)/)[3]; 
+      // This regex makes emacs give up on indenting this file right here! (js-mode or js2-mode)
+      	    if ('https:' == document.location.protocol) {
+			    var base_url = 'https://redditstatic.s3.amazonaws.com'} else {
+				var base_url = 'http://www.reddit.com/static'}
+			var write_string="<iframe src=\"" + base_url + "/button/button1.html?width=120&url=";
+			if (window.reddit_url)  {write_string += encodeURIComponent(reddit_url);} else { 
+			    write_string += encodeURIComponent(window.location.href);}
+			if (window.reddit_title) {write_string += '&title=' + encodeURIComponent(window.reddit_title);}
+			console.log('Setting subreddit to ' + window.reddit_target);
+			if (window.reddit_target) {write_string += '&sr=' + encodeURIComponent(window.reddit_target);}
+			if (window.reddit_css) {write_string += '&css=' + encodeURIComponent(window.reddit_css);}
+			if (window.reddit_bgcolor) {write_string += '&bgcolor=' + encodeURIComponent(window.reddit_bgcolor); }
+			if (window.reddit_bordercolor) {write_string += '&bordercolor=' + encodeURIComponent(window.reddit_bordercolor); }
+			if (window.reddit_newwindow) {write_string += '&newwindow=' + encodeURIComponent(window.reddit_newwindow);}
+			write_string += "\" height=\"22\" width=\"120\" scrolling='no' frameborder='0'></iframe>";
+			// We need a container <whatever id="reddit"> as placeholder for the button
+			jQuery("#reddit").html(write_string);
+	} else {
+	    // If the visitor is coming from another referral (or no referral,) in the simplest case we'd just
+	    // slap our base reddit in there. But... of course, there's always a slightly better solution. In 
+	    // this case, we search for our canonical url in reddit. If we find it, we select the thread with the 
+	    // most votes and set the subreddit there. It looks better, in case of multiple cross-posting. AND also 
+	    // means that if someone has sent it to r/tomatoes, when a visitor lands for the first time (coming from 
+	    // any source) he will see how many upvotes it has in r/tomatoes and will be able to upload there. Because 
+	    // we love tomatoes
+	    try {
+		console.log(jQuery("[rel=canonical]").attr("href"));
+		
+		searchdata="http://www.reddit.com/search.json?q=url:"+jQuery("[rel=canonical]").attr("href");
+		jQuery.ajax({
+		    type: "GET",
+		    jsonp: 'jsonp',
+		    url : searchdata,
+		    dataType : "jsonp",
+		    success: function(results){
+				var best_score = 0;
+			
+				results.data.children.forEach(function(item){
+					// Sorting by score is the most straightforward way. A subtler method would
+					// weight recency with score, to make sure we are not inducing our users to 
+					// upvote on a 6 month old thread with 3 votes 
+					// when someone has just submitted it to anothersubreddit
+					if (item.data.score > best_score) {
+						target=item.data.subreddit;
+						best_score = item.data.score;
+					}
+				})
+			},
+		    complete: function(result, how) {    
+				// The "complete" callback in the .ajax jQuery method is always executed, right after "complete" 
+				// and "error." This makes sense, since we want the button to appear whatever happens. This code 
+				// is taken straight from the reddit button1 implementation, just made a little more compact. It's 
+				// wonderful that reddit's code is not minified or obfuscated for this case...
+				if(typeof target != "undefined" && target != ""){
+					reddit_target = target;
+					console.log('target: ' + target);
+				}
+				
+				if ('https:' == document.location.protocol) {
+					var base_url = 'https://redditstatic.s3.amazonaws.com'} else {
+					var base_url = 'http://www.reddit.com/static'}
+				var write_string="<iframe src=\"" + base_url + "/button/button1.html?width=120&url=";
+				if (window.reddit_url)  {write_string += encodeURIComponent(reddit_url);} else { 
+					write_string += encodeURIComponent(window.location.href);}
+				if (window.reddit_title) {write_string += '&title=' + encodeURIComponent(window.reddit_title);}
+				
+				console.log('Setting subreddit to ' + window.reddit_target);
+				if (window.reddit_target) {write_string += '&sr=' + encodeURIComponent(window.reddit_target);}
+				if (window.reddit_css) {write_string += '&css=' + encodeURIComponent(window.reddit_css);}
+				if (window.reddit_bgcolor) {write_string += '&bgcolor=' + encodeURIComponent(window.reddit_bgcolor); }
+				if (window.reddit_bordercolor) {write_string += '&bordercolor=' + encodeURIComponent(window.reddit_bordercolor); }
+				write_string += '&newwindow=1';
+				write_string += "\" height=\"22\" width=\"120\" scrolling='no' frameborder='0'></iframe>";
+				// We need a container <whatever id="reddit"> as placeholder for the button
+				jQuery("#reddit").html(write_string);
+		    }
+		});
+	    } catch(err){
+		// Shit can happen. If it does, at least don't complain
+	    }
+	}
+    }
+    catch(err){
+	// Shit can happen. If it does, at least don't complain
+    }
+});
+</script>
