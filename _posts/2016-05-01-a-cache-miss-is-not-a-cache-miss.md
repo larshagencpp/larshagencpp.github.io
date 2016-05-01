@@ -93,3 +93,8 @@ Why do we see this large difference? The answer is simply data dependency. When 
 **Conclusion**
 
 I hope I have made the argument that all cache misses are not equal, and that considering data dependency between the reads can be just as important as counting cache misses.
+
+**Related Material**
+<iframe width="320" height="180" src="https://www.youtube.com/embed/YQs6IC-vgmo" frameborder="0" allowfullscreen></iframe>
+<iframe width="320" height="180" src="https://www.youtube.com/embed/rX0ItVEVjHc" frameborder="0" allowfullscreen></iframe>
+<iframe width="320" height="180" src="https://www.youtube.com/embed/WDIkqP4JbkE" frameborder="0" allowfullscreen></iframe>
