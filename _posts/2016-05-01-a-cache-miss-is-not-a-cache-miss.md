@@ -90,6 +90,8 @@ We can see clear jumps in the run times when the data set grows out of the vario
 
 Why do we see this large difference? The answer is simply data dependency. When you are iterating over a range of pointers, the CPU can start reading in several values a the same time, and then add them to the sum as they come in from the memory system. With the linked list structure, we can't continue to the next node until the current node is fully read from memory, because we don't know where to go next. This means we can't have many reads in flight at the same time. Put simply, the pointer iteration is more dependent on memory throughput, the linked list iteration is more dependent on memory latency.
 
+<i>**Update:** Thanks to [@matt_dz](https://twitter.com/matt_dz) for running some performance counter measurements on the above experiments, results can be seen in his [gist](https://gist.github.com/MattPD/06e293fb935eaf67ee9c301e70db6975). Among other things, the results show that cache miss counts are fairly similar for vector of pointers iteration and linked list, and that the benefit of vector of pointers is not due to hardware prefetching.</i>
+
 **Conclusion**
 
 I hope I have made the argument that all cache misses are not equal, and that considering data dependency between the reads can be just as important as counting cache misses.
