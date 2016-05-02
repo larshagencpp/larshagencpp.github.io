@@ -86,7 +86,7 @@ For each $$N$$, the operations are run 100 times and the median time is reported
 
 We can see clear jumps in the run times when the data set grows out of the various cache levels. Furthermore, we see that the effect of cache misses is much worse for the linked list. I have also verified with gcc and perf that the cache miss count is roughly equal for the pointer iteration and linked list iteration.
 
-{% include plot.html divid="cachemisses" csvpath="/project/cache_misses/cache_misses_msvc.csv" title="Iteration" ytitle="Time per element(ns)" suffix="ns/elem" %}
+{% include plot.html divid="cachemisses" csvdata=site.data.project.cache_misses.cache_misses_msvc title="Iteration" ytitle="Time per element(ns)" suffix="ns/elem" %}
 
 Why do we see this large difference? The answer is simply data dependency. When you are iterating over a range of pointers, the CPU can start reading in several values a the same time, and then add them to the sum as they come in from the memory system. With the linked list structure, we can't continue to the next node until the current node is fully read from memory, because we don't know where to go next. This means we can't have many reads in flight at the same time. Put simply, the pointer iteration is more dependent on memory throughput, the linked list iteration is more dependent on memory latency.
 

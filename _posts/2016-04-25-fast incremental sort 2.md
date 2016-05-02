@@ -68,17 +68,17 @@ private:
 
 As we can see, the heap sorter does solve the problem, and is faster than doing a full sort for small and medium $$k$$, but it's not really a competitor against the incremental quicksort based sorts. If I have missed some simple way to optimize the heap sort, please let me know.
 
-{% include plot.html divid="heapsortmsvc" csvpath="/project/incremental_sort/heap_sorter_msvc.csv" title="Heap Sorting" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="heapsortmsvc" csvdata=site.data.project.incremental_sort.heap_sorter_msvc title="Heap Sorting" ytitle="Time(ms)" suffix="ms" %}
 
 **Smaller Scale**
 
 I was also asked why I had chosen the rather arbitrary scale of $$N=10^7$$. I didn't have a really good answer, so I thought I would try out for some smaller values of $$N$$, to see if anything interesting happens.
 
-{% include plot.html divid="ss1000000msvc" csvpath="/project/incremental_sort/small_scale_1000000_msvc.csv" title="N=1,000,000" ytitle="Time(ms)" suffix="ms" %}
-{% include plot.html divid="ss100000msvc" csvpath="/project/incremental_sort/small_scale_100000_msvc.csv" title="N=100,000" ytitle="Time(ms)" suffix="ms" %}
-{% include plot.html divid="ss10000msvc" csvpath="/project/incremental_sort/small_scale_10000_msvc.csv" title="N=10,000" ytitle="Time(ms)" suffix="ms" %}
-{% include plot.html divid="ss1000msvc" csvpath="/project/incremental_sort/small_scale_1000_msvc.csv" title="N=1,000" ytitle="Time(ms)" suffix="ms" %}
-{% include plot.html divid="ss100msvc" csvpath="/project/incremental_sort/small_scale_100_msvc.csv" title="N=100" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="ss1000000msvc" csvdata=site.data.project.incremental_sort.small_scale_1000000_msvc title="N=1,000,000" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="ss100000msvc" csvdata=site.data.project.incremental_sort.small_scale_100000_msvc title="N=100,000" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="ss10000msvc" csvdata=site.data.project.incremental_sort.small_scale_10000_msvc title="N=10,000" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="ss1000msvc" csvdata=site.data.project.incremental_sort.small_scale_1000_msvc title="N=1,000" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="ss100msvc" csvdata=site.data.project.incremental_sort.small_scale_100_msvc title="N=100" ytitle="Time(ms)" suffix="ms" %}
 
 I really don't know if these microsesecond level measurements are reliable, as they were not what I intended to measure when I wrote the original timer code. Anyway, I think we can see a pattern. My custom sorters have a certain startup cost, that starts making a difference at $$N\le 1000$$. The heap based sorter seems to an excellent choice for that case. For $$N\ge 10^4$$, skewed incremental quicksort seems like the best option.
 

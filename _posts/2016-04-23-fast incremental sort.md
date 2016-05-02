@@ -47,7 +47,7 @@ private:
 
 Unsurprisingly, the performance of this algorithm is virtually independent of $$k$$, as all the work is done at the start. This is obviously, not a good solution, but it's a nice reference point, especially when $$k$$ approaches $$N$$.
 
-{% include plot.html divid="presortmsvc" csvpath="/project/incremental_sort/pre_sorter_msvc.csv" title="Pre-Sorting" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="presortmsvc" csvdata=site.data.project.incremental_sort.pre_sorter_msvc title="Pre-Sorting" ytitle="Time(ms)" suffix="ms" %}
 
 **Partial Sorting**
 
@@ -98,7 +98,7 @@ public:
 
 This method is a huge improvement for small $$k$$, but it performs worse for $$k\gt$$ 1 million.
 
-{% include plot.html divid="partialsortmsvc" csvpath="/project/incremental_sort/partial_sorter_msvc.csv" title="Partial Sorting" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="partialsortmsvc" csvdata=site.data.project.incremental_sort.partial_sorter_msvc title="Partial Sorting" ytitle="Time(ms)" suffix="ms" %}
 
 Since the <code>std::partial_sort</code> algortithm costs $$O(N \log k)$$, the $$O(\log N)$$ calls to <code>std::partial_sort</code> has a total worst case run time of $$O(N \log^2 N )$$. This means that in total we are doing more work than we should, time to fix this.
 
@@ -171,7 +171,7 @@ public:
 Looking at the results for this algorithm, it's clear that the total amount of work done when $$k=N$$ is now optimal,
 because the time to sort the whole range is now as fast as a single call to <code>std::sort</code>. This has the benefit that you don't need to worry about switching over to <code>std::sort</code> if you know that you'll need a large part of the result, you can just use the incremental version anyway.
 
-{% include plot.html divid="simplequicksortmsvc" csvpath="/project/incremental_sort/simple_quick_sorter_msvc.csv" title="Simple Quick Sorting" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="simplequicksortmsvc" csvdata=site.data.project.incremental_sort.simple_quick_sorter_msvc title="Simple Quick Sorting" ytitle="Time(ms)" suffix="ms" %}
 
 The downside of this algorithm, though, is that it does spend considerably more time than <code>std::partial_sort</code> coming up with the first few elements. If I need between 1 and 5000 elements, partial sorting is still the way to go by the looks of it. Why is that?
 
@@ -193,7 +193,7 @@ For a partition operation that cuts the range in half, the number of branch misp
 
 We see that partition speed is heavily impacted by the branch mispredictions, it seems to account for up to $$4x$$ difference in speed.
 
-{% include plot.html divid="branch_prediction" csvpath="/project/incremental_sort/branch_prediction.csv" ytitle="Time(ms)" suffix="ms" %}
+{% include plot.html divid="branch_prediction" csvdata=site.data.project.incremental_sort.branch_prediction ytitle="Time(ms)" suffix="ms" %}
 
 **Skewed Incremental Quick Sort**
 
@@ -237,7 +237,7 @@ value_type get_pivot() {
 }
 {% endhighlight %}
 
- {% include plot.html divid="skewedquicksortmsvc" csvpath="/project/incremental_sort/skewed_quick_sorter_msvc.csv" title="Skewed Quick Sorting" ytitle="Time(ms)" suffix="ms" %}
+ {% include plot.html divid="skewedquicksortmsvc" csvdata=site.data.project.incremental_sort.skewed_quick_sorter_msvc title="Skewed Quick Sorting" ytitle="Time(ms)" suffix="ms" %}
  
 **Summary**
  

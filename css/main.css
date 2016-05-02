@@ -58,3 +58,12 @@ ul.posts {
 ul.posts li {
     list-style: none;
 }
+
+table.data {
+    border-collapse: collapse;
+}
+
+td.data {
+	border: 1px solid black;
+	padding: 3px;
+}

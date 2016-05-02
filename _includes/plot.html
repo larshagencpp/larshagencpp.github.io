@@ -1,8 +1,22 @@
-<div id="{{ include.divid }}" style="min-width: 310px; margin: 0 auto"></div>
+<div id="{{ include.divid }}" style="min-width: 310px; margin: 0 auto">
+<h4>{{ include.title }} <i>({{ include.suffix }})</i></h4>
+<table class="data">
+  <tr>
+  {% for prop in include.csvdata[0] %}
+	<th class="data">{{ prop[0] }}</th>
+  {% endfor %}
+  </tr>
+{% for line in include.csvdata %}
+  <tr>
+	{% for prop in line %}
+		<td class="data">{{ prop[1] }}</td>
+	{% endfor %}
+  </tr>
+{% endfor %}
+</table>
+</div>
 <script>
 (function () {
-	var request = new XMLHttpRequest();
-	
 	function evaluateSpread(serie) {
 		var copy = serie.map(function (x) { return x });
 		copy.sort(function(a, b){ return a-b; });
@@ -24,77 +38,80 @@
 		return logScore < linearScore;
 	}
 	
-	request.onreadystatechange = function() {
-	  if (request.readyState == 4 && request.status == 200) {
-		var data = $.csv.toArrays(request.responseText);
-		header = data[0];
-		var transformed = TransposeCsvData(data);
-		
-		var yLinSpread = 0;
-		var yLogSpread = 0;
-		for(var i = 1; i < transformed.length; ++i){
-			yLinSpread += evaluateSpread(transformed[i]);
-			yLogSpread += evaluateSpread(transformed[i].map(function(x) { return Math.log(x); }));
-		}
-		
-		var xAxis = { title: { text: header[0] } };
-		series = [];
-		if(transformed[0].every(function (x) { return !isNaN(x) })) {
-			//X axis is numerical
-			for(var i in header) {
-				if(i != 0){
-					var serie = [];
-					for(var j = 0; j < transformed[0].length; ++j) {
-						serie.push([transformed[0][j], transformed[i][j]]);
-					}
-					series.push({name: header[i], data: serie});
-				}
-			}
-			
-			if(isLogarithmic(transformed[0])) {
-				xAxis['type'] = 'logarithmic';
-			}
-		}
-		else {
-			//X axis is not numerical
-			xAxis['categories'] = transformed[0];
-			for(var i in header) {
-				if(i != 0){
-					series.push({name: header[i], data: transformed[i]});
-				}
-			}
-		}
-		
-		yAxis = {
-			title: {
-				text: '{{ include.ytitle }}'
-			}
-		};
-			
-		if(yLogSpread < yLinSpread) {
-			yAxis['type'] = 'logarithmic';
-		}
-		
-		$('#{{ include.divid }}').highcharts({
-			title: {
-				text: '{{ include.title }}'
-			},
-			xAxis: xAxis,
-			yAxis: yAxis,
-			tooltip: {
-				valueSuffix: '{{ include.suffix }}'
-			},
-			legend: {
-				layout: 'vertical',
-				align: 'right',
-				verticalAlign: 'middle'
-			},
-			series: series
-		});
-	  }
-	};
+	var header = []
+	var transformed = [];
+
+	{% for prop in include.csvdata[0] %}
+		header.push("{{ prop[0] }}");
+		transformed.push([]);
+	{% endfor %}
+  
+	{% for line in include.csvdata %}
+		{% for prop in line %}
+			transformed[{{ forloop.index }} - 1].push({{ prop[1] }});
+		{% endfor %}
+	{% endfor %}
 	
-	request.open("GET", "{{ include.csvpath }}", true);
-	request.send();
+	var yLinSpread = 0;
+	var yLogSpread = 0;
+	for(var i = 1; i < transformed.length; ++i){
+		yLinSpread += evaluateSpread(transformed[i]);
+		yLogSpread += evaluateSpread(transformed[i].map(function(x) { return Math.log(x); }));
+	}
+	
+	var xAxis = { title: { text: header[0] } };
+	series = [];
+	if(transformed[0].every(function (x) { return !isNaN(x) })) {
+		//X axis is numerical
+		for(var i in header) {
+			if(i != 0){
+				var serie = [];
+				for(var j = 0; j < transformed[0].length; ++j) {
+					serie.push([transformed[0][j], transformed[i][j]]);
+				}
+				series.push({name: header[i], data: serie});
+			}
+		}
+		
+		if(isLogarithmic(transformed[0])) {
+			xAxis['type'] = 'logarithmic';
+		}
+	}
+	else {
+		//X axis is not numerical
+		xAxis['categories'] = transformed[0];
+		for(var i in header) {
+			if(i != 0){
+				series.push({name: header[i], data: transformed[i]});
+			}
+		}
+	}
+	
+	yAxis = {
+		title: {
+			text: '{{ include.ytitle }}'
+		}
+	};
+		
+	if(yLogSpread < yLinSpread) {
+		yAxis['type'] = 'logarithmic';
+	}
+	
+	$('#{{ include.divid }}').highcharts({
+		title: {
+			text: '{{ include.title }}'
+		},
+		xAxis: xAxis,
+		yAxis: yAxis,
+		tooltip: {
+			valueSuffix: '{{ include.suffix }}'
+		},
+		legend: {
+			layout: 'vertical',
+			align: 'right',
+			verticalAlign: 'middle'
+		},
+		series: series
+	});
 })();
 </script>
