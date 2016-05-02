@@ -94,6 +94,7 @@ Why do we see this large difference? The answer is simply data dependency. When 
 
 I hope I have made the argument that all cache misses are not equal, and that considering data dependency between the reads can be just as important as counting cache misses.
 
+<i>**Edit:** As some people have pointed out, the statement "all cache misses are not equal" is a bit misleading. The cache misses themselves are the same and have the same latency for both workloads. The difference is how many cache misses that can be in flight concurrently. So while the the cache misses are equal in that sense, they do not have an equal effect on latency of the whole iteration, which is what I tend to care about.</i>
 
 **Related Material**
 <iframe width="320" height="180" src="https://www.youtube.com/embed/YQs6IC-vgmo" frameborder="0" allowfullscreen></iframe>
